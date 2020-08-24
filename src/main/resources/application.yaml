@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    initialization-mode: embedded
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:portal
+      username: sa
+      password:
+server:
+  port: 8088
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: kr.re.kari.portal.board.model
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    kr:
+      re:
+        kari:
+          portal:
+            board: trace
+    org:
+      mybatis: trace
+      apache:
+        ibatis: trace
+      springframework:
+        jdbc: debug
