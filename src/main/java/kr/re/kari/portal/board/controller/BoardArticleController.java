@@ -18,6 +18,7 @@ public class BoardArticleController {
 
 	private final BoardArticleMapper boardArticleMapper;
 
+
 	@GetMapping
 	public List<BoardArticle> getBoardArticleAll(@PathVariable Long boardId) {
 		return boardArticleMapper.findAll(boardId);
@@ -29,11 +30,14 @@ public class BoardArticleController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> postBoardArticle(@RequestBody BoardArticleDto boardArticleDto) {
+	public ResponseEntity<?> postBoardArticle(
+			@PathVariable Long boardId,
+			@RequestBody BoardArticleDto boardArticleDto) {
 
-		log.debug(boardArticleDto.getContents());
+		boardArticleDto.setBoardId(boardId);
+		boardArticleMapper.save(boardArticleDto);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(boardArticleMapper.findById(boardArticleDto.getArticleId()));
 	}
 
 	@PutMapping("/{articleId}")
@@ -44,6 +48,7 @@ public class BoardArticleController {
 
 	@DeleteMapping("/{articleId}")
 	public ResponseEntity<?> deleteBoardArticle(@RequestBody BoardArticle boardArticle) {
+		log.debug(boardArticle.toString());
 		return ResponseEntity.ok().build();
 	}
 }

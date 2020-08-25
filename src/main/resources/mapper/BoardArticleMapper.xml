@@ -41,4 +41,27 @@
         WHERE ARTICLE_ID = #{articleId}
     </select>
 
+    <insert id="save" parameterType="boardArticle" keyProperty="articleId" useGeneratedKeys="true">
+        INSERT INTO BOARD_ARTICLE (
+        PARENT_ARTICLE_ID,
+        BOARD_ID,
+        NOTICE_YN,
+        TITLE,
+        CONTENTS,
+        READ_COUNT,
+        USE_YN,
+        REGISTER_ID
+        )
+        VALUES (
+        #{parentArticleId},
+        #{boardId},
+        #{noticeYn},
+        #{title},
+        #{contents},
+        0,
+        'Y',
+        'ADMIN'
+        )
+    </insert>
+
 </mapper>
