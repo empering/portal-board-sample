@@ -1,0 +1,40 @@
+// 게시판 타입에 전체 게시물
+GET http://{{host}}/board/1/article
+Accept: application/json
+
+> {%
+client.test("get all articles by boardId", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+
+%}
+
+###
+
+// 게시물 1건 상세
+GET http://{{host}}/board/1/article/2
+Accept: application/json
+
+> {%
+client.test("get boardArticle by articleId", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+// 게시물 등록
+POST http://{{host}}/board/2/article
+Content-Type: application/json
+
+< ./data/boardArticle.json
+
+> {%
+client.test("post boardArticle", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+
