@@ -1,6 +1,6 @@
 package kr.re.kari.portal.board;
 
-import kr.re.kari.portal.board.mapper.BaseMapper;
+import kr.re.kari.portal.board.common.BaseMapper;
 import org.modelmapper.ModelMapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

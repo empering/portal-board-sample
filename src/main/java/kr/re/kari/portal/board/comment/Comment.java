@@ -1,11 +1,13 @@
-package kr.re.kari.portal.board.model;
+package kr.re.kari.portal.board.comment;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 
+@Alias("comment")
 @Getter
 @Setter
-public class BoardComment {
+public class Comment {
 
   private long commentId;
   private long articleId;

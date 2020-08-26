@@ -1,4 +1,4 @@
-package kr.re.kari.portal.board.mapper;
+package kr.re.kari.portal.board.common;
 
 import java.util.List;
 

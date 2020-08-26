@@ -1,11 +1,13 @@
-package kr.re.kari.portal.board.model;
+package kr.re.kari.portal.board.master;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 
+@Alias("master")
 @Getter
 @Setter
-public class BoardMaster {
+public class Master {
 
   private long boardId;
   private String boardType;

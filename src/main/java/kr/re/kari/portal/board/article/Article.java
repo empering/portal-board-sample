@@ -3,7 +3,9 @@ package kr.re.kari.portal.board.article;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.ibatis.type.Alias;
 
+@Alias("article")
 @Getter
 @Setter
 @ToString

@@ -1,6 +1,6 @@
 package kr.re.kari.portal.board.article;
 
-import kr.re.kari.portal.board.mapper.BaseMapper;
+import kr.re.kari.portal.board.common.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
