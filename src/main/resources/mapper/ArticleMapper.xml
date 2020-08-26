@@ -76,4 +76,12 @@
         WHERE ARTICLE_ID = #{articleId}
     </update>
 
+    <update id="delete" parameterType="long">
+        UPDATE BOARD_ARTICLE
+        SET USE_YN = 'N',
+            UPDATE_ID = 'ADMIN',
+            UPDATE_TIMESTAMP = NOW()
+        WHERE ARTICLE_ID = #{articleId}
+    </update>
+
 </mapper>

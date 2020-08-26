@@ -1,4 +1,4 @@
-package kr.re.kari.portal.board.controller;
+package kr.re.kari.portal.board.article;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.re.kari.portal.board.article.ArticleDto;
@@ -111,4 +111,15 @@ class ArticleControllerTest {
 	}
 
 
+	@Test
+	public void deleteArticle() throws Exception {
+		mockMvc.perform(
+				delete("/board/{boardId}/article/{articleId}",
+						TEST_BOARD_ID, TEST_ARTICLE_ID)
+		)
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andDo(document("deleteArticle"))
+		;
+	}
 }

@@ -57,8 +57,16 @@ public class ArticleController {
 	}
 
 	@DeleteMapping("/{articleId}")
-	public ResponseEntity<?> deleteArticle(@RequestBody Article article) {
-		log.debug(article.toString());
+	public ResponseEntity<?> deleteArticle(@PathVariable Long articleId) {
+
+		Article article = articleMapper.findById(articleId);
+
+		if (article == null) {
+			return ResponseEntity.badRequest().build();
+		}
+
+		articleMapper.delete(articleId);
+
 		return ResponseEntity.ok().build();
 	}
 }

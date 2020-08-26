@@ -8,4 +8,5 @@ public interface BaseMapper<T, ID> {
 
 	<S extends T> void save(S entity);
 	<S extends T> void update(S entity);
+	void delete(ID id);
 }
