@@ -1,4 +1,4 @@
-package kr.re.kari.portal.board.model;
+package kr.re.kari.portal.board.article;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class BoardArticleDto extends BoardArticle {
+public class ArticleDto extends Article {
 	private String searchKey;
 	private String searchWord;
 	private int pageSize = 10;

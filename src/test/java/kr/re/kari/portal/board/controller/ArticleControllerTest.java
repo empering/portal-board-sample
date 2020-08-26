@@ -1,7 +1,7 @@
 package kr.re.kari.portal.board.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.re.kari.portal.board.model.BoardArticleDto;
+import kr.re.kari.portal.board.article.ArticleDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(RestDocumentationExtension.class)
 @SpringBootTest
 // @AutoConfigureMockMvc
-class BoardArticleControllerTest {
+class ArticleControllerTest {
 
 	private static final Long TEST_BOARD_ID = 1L;
 
@@ -50,29 +50,29 @@ class BoardArticleControllerTest {
 	}
 
 	@Test
-	public void getBoardArticleAll() throws Exception {
+	public void getArticleAll() throws Exception {
 		mockMvc.perform(
 				get("/board/{boardId}/article", TEST_BOARD_ID))
 				.andExpect(status().isOk())
 				.andDo(print())
-				.andDo(document("getBoardArticleAll"))
+				.andDo(document("getArticleAll"))
 		;
 	}
 
 	@Test
-	public void getBoardArticle() throws Exception {
+	public void getArticle() throws Exception {
 		mockMvc.perform(
 				get("/board/{boardId}/article/{articleId}",
 						TEST_BOARD_ID, TEST_ARTICLE_ID))
 				.andExpect(status().isOk())
 				.andDo(print())
-				.andDo(document("getBoardArticle"))
+				.andDo(document("getArticle"))
 		;
 	}
 
 	@Test
-	void postBoardArticle() throws Exception {
-		BoardArticleDto dto = new BoardArticleDto();
+	void postArticle() throws Exception {
+		ArticleDto dto = new ArticleDto();
 		dto.setTitle("junit test title");
 		dto.setContents("junit test contents");
 		dto.setNoticeYn("N");
@@ -86,7 +86,7 @@ class BoardArticleControllerTest {
 		)
 				.andExpect(status().isOk())
 				.andDo(print())
-				.andDo(document("postBoardArticle"))
+				.andDo(document("postArticle"))
 		;
 	}
 

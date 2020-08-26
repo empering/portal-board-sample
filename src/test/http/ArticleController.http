@@ -16,7 +16,7 @@ GET http://{{host}}/board/1/article/2
 Accept: application/json
 
 > {%
-client.test("get boardArticle by articleId", function() {
+client.test("get article by articleId", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
 %}
@@ -27,10 +27,10 @@ client.test("get boardArticle by articleId", function() {
 POST http://{{host}}/board/2/article
 Content-Type: application/json
 
-< ./data/boardArticle.json
+< ./data/article.json
 
 > {%
-client.test("post boardArticle", function() {
+client.test("post article", function() {
   client.assert(response.status === 200, "Response status is not 200");
 });
 %}

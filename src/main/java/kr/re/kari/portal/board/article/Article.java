@@ -1,4 +1,4 @@
-package kr.re.kari.portal.board.model;
+package kr.re.kari.portal.board.article;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class BoardArticle {
+public class Article {
 
   private long articleId;
   private long parentArticleId;
