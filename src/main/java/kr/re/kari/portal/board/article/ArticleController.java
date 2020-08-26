@@ -2,6 +2,7 @@ package kr.re.kari.portal.board.article;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ public class ArticleController {
 
 	private final ArticleMapper articleMapper;
 
+	private final ModelMapper modelMapper;
 
 	@GetMapping
 	public List<Article> getArticleAll(@PathVariable Long boardId) {
@@ -38,9 +40,20 @@ public class ArticleController {
 	}
 
 	@PutMapping("/{articleId}")
-	public ResponseEntity<?> putArticle(@RequestBody Article article) {
-		log.debug(article.toString());
-		return ResponseEntity.ok().build();
+	public ResponseEntity<?> putArticle(
+			@PathVariable Long articleId,
+			@RequestBody ArticleDto articleDto) {
+
+		Article article = articleMapper.findById(articleId);
+
+		if (article == null) {
+			return ResponseEntity.badRequest().build();
+		}
+
+		articleDto.setArticleId(articleId);
+		articleMapper.update(articleDto);
+
+		return ResponseEntity.ok().body(articleMapper.findById(articleDto.getArticleId()));
 	}
 
 	@DeleteMapping("/{articleId}")

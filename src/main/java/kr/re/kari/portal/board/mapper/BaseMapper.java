@@ -7,4 +7,5 @@ public interface BaseMapper<T, ID> {
 	T findById(ID id);
 
 	<S extends T> void save(S entity);
+	<S extends T> void update(S entity);
 }

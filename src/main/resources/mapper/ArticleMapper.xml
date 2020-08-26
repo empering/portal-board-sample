@@ -64,4 +64,16 @@
         )
     </insert>
 
+    <update id="update" parameterType="article">
+        UPDATE BOARD_ARTICLE
+        <set>
+            <if test="noticeYn != null">NOTICE_YN = #{noticeYn},</if>
+            <if test="title != null">TITLE = #{title},</if>
+            <if test="contents != null">CONTENTS = #{contents},</if>
+            UPDATE_ID = 'ADMIN',
+            UPDATE_TIMESTAMP = NOW()
+        </set>
+        WHERE ARTICLE_ID = #{articleId}
+    </update>
+
 </mapper>

@@ -16,8 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,7 +70,7 @@ class ArticleControllerTest {
 	}
 
 	@Test
-	void postArticle() throws Exception {
+	public void postArticle() throws Exception {
 		ArticleDto dto = new ArticleDto();
 		dto.setTitle("junit test title");
 		dto.setContents("junit test contents");
@@ -89,5 +88,27 @@ class ArticleControllerTest {
 				.andDo(document("postArticle"))
 		;
 	}
+
+	@Test
+	public void purArticle() throws Exception {
+		ArticleDto dto = new ArticleDto();
+		dto.setTitle("junit test title change");
+		dto.setContents("junit test contents change");
+		dto.setNoticeYn("Y");
+
+		String json = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(
+				put("/board/{boardId}/article/{articleId}",
+						TEST_BOARD_ID, TEST_ARTICLE_ID)
+						.content(json)
+						.contentType(MediaType.APPLICATION_JSON)
+		)
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andDo(document("putArticle"))
+		;
+	}
+
 
 }
