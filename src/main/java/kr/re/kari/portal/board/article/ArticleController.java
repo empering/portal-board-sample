@@ -3,10 +3,16 @@ package kr.re.kari.portal.board.article;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController()
 @RequestMapping("/board/{boardId}/article")
@@ -18,22 +24,37 @@ public class ArticleController {
 
 	private final ModelMapper modelMapper;
 
+	Long boardId;
+
+	@InitBinder
+	public void getBoardId(@PathVariable Long boardId) {
+		this.boardId = boardId;
+	}
+
 	@GetMapping
-	public List<Article> getArticleAll(
-			@PathVariable Long boardId,
-			@RequestBody ArticleSearchDto dto) {
-		return articleMapper.findAll(boardId);
+	public CollectionModel<EntityModel<Article>> getArticleAll(@RequestBody ArticleSearchDto dto) {
+		List<EntityModel<Article>> articles = articleMapper.findAll(boardId).stream()
+				.map(article ->
+						EntityModel.of(article,
+								linkTo(methodOn(ArticleController.class).getArticle(article.getArticleId())).withSelfRel(),
+								linkTo(methodOn(ArticleController.class).getArticleAll(null)).withRel("article")
+						)).collect(Collectors.toList());
+
+		return CollectionModel.of(articles,
+				linkTo(methodOn(ArticleController.class).getArticleAll(dto)).withRel("article"));
 	}
 
 	@GetMapping("/{articleId}")
-	public Article getArticle(@PathVariable Long articleId) {
-		return articleMapper.findById(articleId);
+	public EntityModel<Article> getArticle(@PathVariable Long articleId) {
+		// return articleMapper.findById(articleId);
+		return EntityModel.of(articleMapper.findById(articleId),
+				linkTo(methodOn(ArticleController.class).getArticle(articleId)).withSelfRel(),
+				linkTo(methodOn(ArticleController.class).getArticleAll(null)).withRel("article")
+		);
 	}
 
 	@PostMapping
-	public ResponseEntity<?> postArticle(
-			@PathVariable Long boardId,
-			@RequestBody Article article) {
+	public ResponseEntity<?> postArticle(@RequestBody Article article) {
 
 		article.setBoardId(boardId);
 		articleMapper.save(article);
@@ -69,6 +90,6 @@ public class ArticleController {
 
 		articleMapper.delete(articleId);
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 }

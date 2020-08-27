@@ -5,6 +5,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -72,20 +73,8 @@ class ArticleControllerTest {
 								parameterWithName("boardId").description("게시판ID")
 						),
 						responseFields(
-								fieldWithPath("[]").description("게시물 목록")
-						).andWithPrefix("[].",
-								fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("게시물ID"),
-								fieldWithPath("parentArticleId").type(JsonFieldType.NUMBER).description("부모게시물ID"),
-								fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시판ID"),
-								fieldWithPath("noticeYn").type(JsonFieldType.STRING).description("공지여부"),
-								fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
-								fieldWithPath("contents").type(JsonFieldType.STRING).description("내용"),
-								fieldWithPath("readCount").type(JsonFieldType.NUMBER).description("조회수"),
-								fieldWithPath("useYn").type(JsonFieldType.STRING).description("사용여부"),
-								fieldWithPath("registerId").type(JsonFieldType.STRING).description("등록자"),
-								fieldWithPath("registerTimestamp").type(JsonFieldType.STRING).description("등록일시"),
-								fieldWithPath("updateId").type(JsonFieldType.VARIES).description("수정자").optional(),
-								fieldWithPath("updateTimestamp").type(JsonFieldType.VARIES).description("수정일시").optional()
+								subsectionWithPath("_embedded.articleList").description("An array of <<get-article, article resources>>"),
+								subsectionWithPath("_links").description("<<get-article-all,links>> to other resources").optional()
 						)
 				))
 		;
@@ -96,7 +85,7 @@ class ArticleControllerTest {
 		mockMvc.perform(
 				get("/board/{boardId}/article/{articleId}",
 						TEST_BOARD_ID, TEST_ARTICLE_ID)
-						.accept(MediaType.APPLICATION_JSON)
+						.accept(MediaTypes.HAL_JSON)
 		)
 				.andExpect(status().isOk())
 				.andDo(print())
@@ -117,7 +106,8 @@ class ArticleControllerTest {
 								fieldWithPath("registerId").type(JsonFieldType.STRING).description("등록자"),
 								fieldWithPath("registerTimestamp").type(JsonFieldType.STRING).description("등록일시"),
 								fieldWithPath("updateId").type(JsonFieldType.VARIES).description("수정자").optional(),
-								fieldWithPath("updateTimestamp").type(JsonFieldType.VARIES).description("수정일시").optional()
+								fieldWithPath("updateTimestamp").type(JsonFieldType.VARIES).description("수정일시").optional(),
+								subsectionWithPath("_links").description("<<get-article-all,links>> to other resources")
 						)
 				))
 		;
