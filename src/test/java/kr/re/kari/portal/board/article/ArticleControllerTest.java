@@ -84,8 +84,8 @@ class ArticleControllerTest {
 								fieldWithPath("useYn").type(JsonFieldType.STRING).description("사용여부"),
 								fieldWithPath("registerId").type(JsonFieldType.STRING).description("등록자"),
 								fieldWithPath("registerTimestamp").type(JsonFieldType.STRING).description("등록일시"),
-								fieldWithPath("updateId").type(JsonFieldType.VARIES).description("수정자"),
-								fieldWithPath("updateTimestamp").type(JsonFieldType.VARIES).description("수정일시")
+								fieldWithPath("updateId").type(JsonFieldType.VARIES).description("수정자").optional(),
+								fieldWithPath("updateTimestamp").type(JsonFieldType.VARIES).description("수정일시").optional()
 						)
 				))
 		;
@@ -116,8 +116,8 @@ class ArticleControllerTest {
 								fieldWithPath("useYn").type(JsonFieldType.STRING).description("사용여부"),
 								fieldWithPath("registerId").type(JsonFieldType.STRING).description("등록자"),
 								fieldWithPath("registerTimestamp").type(JsonFieldType.STRING).description("등록일시"),
-								fieldWithPath("updateId").type(JsonFieldType.VARIES).description("수정자"),
-								fieldWithPath("updateTimestamp").type(JsonFieldType.VARIES).description("수정일시")
+								fieldWithPath("updateId").type(JsonFieldType.VARIES).description("수정자").optional(),
+								fieldWithPath("updateTimestamp").type(JsonFieldType.VARIES).description("수정일시").optional()
 						)
 				))
 		;
@@ -145,17 +145,9 @@ class ArticleControllerTest {
 								parameterWithName("boardId").description("게시판ID")
 						),
 						requestFields(
-								fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시판ID"),
 								fieldWithPath("noticeYn").type(JsonFieldType.STRING).description("공지여부"),
 								fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
-								fieldWithPath("contents").type(JsonFieldType.STRING).description("내용"),
-								// TODO : 이건좀...;;
-								subsectionWithPath("articleId").description("게시물ID"),
-								subsectionWithPath("parentArticleId").description("parentArticleId"),
-								subsectionWithPath("readCount").description("readCount"),
-								subsectionWithPath("useYn").description("useYn"),
-								subsectionWithPath("registerId").description("registerId"),
-								subsectionWithPath("updateId").description("updateId")
+								fieldWithPath("contents").type(JsonFieldType.STRING).description("내용")
 						),
 						responseFields(
 								fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("게시물ID"),
@@ -199,17 +191,9 @@ class ArticleControllerTest {
 								parameterWithName("articleId").description("게시물ID")
 						),
 						requestFields(
-								fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("게시물ID"),
-								fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시판ID"),
 								fieldWithPath("noticeYn").type(JsonFieldType.STRING).description("공지여부"),
 								fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
-								fieldWithPath("contents").type(JsonFieldType.STRING).description("내용"),
-								// TODO : 이건좀...;;
-								subsectionWithPath("parentArticleId").description("parentArticleId"),
-								subsectionWithPath("readCount").description("readCount"),
-								subsectionWithPath("useYn").description("useYn"),
-								subsectionWithPath("registerId").description("registerId"),
-								subsectionWithPath("updateId").description("updateId")
+								fieldWithPath("contents").type(JsonFieldType.STRING).description("내용")
 						),
 						responseFields(
 								fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("게시물ID"),
@@ -237,7 +221,7 @@ class ArticleControllerTest {
 						TEST_BOARD_ID, TEST_ARTICLE_ID)
 						.accept(MediaType.APPLICATION_JSON)
 		)
-				.andExpect(status().isOk())
+				.andExpect(status().isNoContent())
 				.andDo(print())
 				.andDo(document("delete-article",
 						pathParameters(
