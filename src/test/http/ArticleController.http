@@ -1,10 +1,14 @@
 // 게시판 타입에 전체 게시물
 GET http://{{host}}/board/1/article
 Accept: application/json
+Content-Type: application/json
+
+{}
 
 > {%
 client.test("get all articles by boardId", function() {
   client.assert(response.status === 200, "Response status is not 200");
+  // client.assert(response.contentType.mimeType === "application/json", "Response contentType is not 'application/json'");
 });
 
 %}
@@ -27,7 +31,7 @@ client.test("get article by articleId", function() {
 POST http://{{host}}/board/2/article
 Content-Type: application/json
 
-< ./data/article.json
+< ./data/article-post.json
 
 > {%
 client.test("post article", function() {
@@ -37,4 +41,28 @@ client.test("post article", function() {
 
 ###
 
+// 게시물 수정
+PUT http://{{host}}/board/2/article/5
+Content-Type: application/json
 
+< ./data/article-put.json
+
+> {%
+client.test("put article", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+// 게시물 삭제
+DELETE http://{{host}}/board/2/article/5
+Content-Type: application/json
+
+< ./data/article-put.json
+
+> {%
+client.test("delete article", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
