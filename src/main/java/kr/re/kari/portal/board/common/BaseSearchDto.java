@@ -1,16 +1,17 @@
-package kr.re.kari.portal.board.article;
+package kr.re.kari.portal.board.common;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+
+import javax.validation.constraints.Min;
 
 @Getter
 @Setter
-@ToString
-public class ArticleDto extends Article {
+public class BaseSearchDto {
 	private String searchKey;
 	private String searchWord;
 	private int pageSize = 10;
+	@Min(1)
 	private int pageIndex = 1;
 	private int countPerPage = 10;
 }

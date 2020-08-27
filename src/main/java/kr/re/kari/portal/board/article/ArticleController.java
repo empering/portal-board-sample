@@ -19,7 +19,9 @@ public class ArticleController {
 	private final ModelMapper modelMapper;
 
 	@GetMapping
-	public List<Article> getArticleAll(@PathVariable Long boardId) {
+	public List<Article> getArticleAll(
+			@PathVariable Long boardId,
+			@RequestBody ArticleSearchDto dto) {
 		return articleMapper.findAll(boardId);
 	}
 
@@ -31,29 +33,29 @@ public class ArticleController {
 	@PostMapping
 	public ResponseEntity<?> postArticle(
 			@PathVariable Long boardId,
-			@RequestBody ArticleDto articleDto) {
+			@RequestBody Article article) {
 
-		articleDto.setBoardId(boardId);
-		articleMapper.save(articleDto);
+		article.setBoardId(boardId);
+		articleMapper.save(article);
 
-		return ResponseEntity.ok().body(articleMapper.findById(articleDto.getArticleId()));
+		return ResponseEntity.ok().body(articleMapper.findById(article.getArticleId()));
 	}
 
 	@PutMapping("/{articleId}")
 	public ResponseEntity<?> putArticle(
 			@PathVariable Long articleId,
-			@RequestBody ArticleDto articleDto) {
+			@RequestBody Article article) {
 
-		Article article = articleMapper.findById(articleId);
+		Article targetArticle = articleMapper.findById(articleId);
 
-		if (article == null) {
+		if (targetArticle == null) {
 			return ResponseEntity.badRequest().build();
 		}
 
-		articleDto.setArticleId(articleId);
-		articleMapper.update(articleDto);
+		article.setArticleId(articleId);
+		articleMapper.update(article);
 
-		return ResponseEntity.ok().body(articleMapper.findById(articleDto.getArticleId()));
+		return ResponseEntity.ok().body(articleMapper.findById(article.getArticleId()));
 	}
 
 	@DeleteMapping("/{articleId}")

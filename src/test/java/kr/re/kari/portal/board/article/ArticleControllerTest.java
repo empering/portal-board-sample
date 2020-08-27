@@ -1,8 +1,7 @@
 package kr.re.kari.portal.board.article;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +22,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(RestDocumentationExtension.class)
 @SpringBootTest
 // @AutoConfigureMockMvc
@@ -52,9 +52,17 @@ class ArticleControllerTest {
 	}
 
 	@Test
+	@Order(0)
 	public void getArticleAll() throws Exception {
+		ArticleSearchDto dto = new ArticleSearchDto();
+		dto.setUseYn("Y");
+
+		String json = objectMapper.writeValueAsString(dto);
+
 		mockMvc.perform(
 				get("/board/{boardId}/article", TEST_BOARD_ID)
+						.content(json)
+						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON)
 		)
 				.andExpect(status().isOk())
@@ -117,7 +125,7 @@ class ArticleControllerTest {
 
 	@Test
 	public void postArticle() throws Exception {
-		ArticleDto dto = new ArticleDto();
+		ArticleFormDto dto = new ArticleFormDto();
 		dto.setTitle("junit test title");
 		dto.setContents("junit test contents");
 		dto.setNoticeYn("N");
@@ -147,14 +155,7 @@ class ArticleControllerTest {
 								subsectionWithPath("readCount").description("readCount"),
 								subsectionWithPath("useYn").description("useYn"),
 								subsectionWithPath("registerId").description("registerId"),
-								subsectionWithPath("registerTimestamp").description("registerTimestamp"),
-								subsectionWithPath("updateId").description("updateId"),
-								subsectionWithPath("updateTimestamp").description("updateTimestamp"),
-								subsectionWithPath("searchKey").description("searchKey"),
-								subsectionWithPath("searchWord").description("searchWord"),
-								subsectionWithPath("pageSize").description("pageSize"),
-								subsectionWithPath("pageIndex").description("pageIndex"),
-								subsectionWithPath("countPerPage").description("countPerPage")
+								subsectionWithPath("updateId").description("updateId")
 						),
 						responseFields(
 								fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("게시물ID"),
@@ -176,7 +177,7 @@ class ArticleControllerTest {
 
 	@Test
 	public void putArticle() throws Exception {
-		ArticleDto dto = new ArticleDto();
+		ArticleFormDto dto = new ArticleFormDto();
 		dto.setTitle("junit test title change");
 		dto.setContents("junit test contents change");
 		dto.setNoticeYn("Y");
@@ -208,14 +209,7 @@ class ArticleControllerTest {
 								subsectionWithPath("readCount").description("readCount"),
 								subsectionWithPath("useYn").description("useYn"),
 								subsectionWithPath("registerId").description("registerId"),
-								subsectionWithPath("registerTimestamp").description("registerTimestamp"),
-								subsectionWithPath("updateId").description("updateId"),
-								subsectionWithPath("updateTimestamp").description("updateTimestamp"),
-								subsectionWithPath("searchKey").description("searchKey"),
-								subsectionWithPath("searchWord").description("searchWord"),
-								subsectionWithPath("pageSize").description("pageSize"),
-								subsectionWithPath("pageIndex").description("pageIndex"),
-								subsectionWithPath("countPerPage").description("countPerPage")
+								subsectionWithPath("updateId").description("updateId")
 						),
 						responseFields(
 								fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("게시물ID"),
