@@ -23,7 +23,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(RestDocumentationExtension.class)
 @SpringBootTest
 // @AutoConfigureMockMvc
@@ -53,7 +52,6 @@ class ArticleControllerTest {
 	}
 
 	@Test
-	@Order(0)
 	public void getArticleAll() throws Exception {
 		ArticleSearchDto dto = new ArticleSearchDto();
 		dto.setUseYn("Y");
@@ -73,8 +71,8 @@ class ArticleControllerTest {
 								parameterWithName("boardId").description("게시판ID")
 						),
 						responseFields(
-								subsectionWithPath("_embedded.articleList").description("An array of <<get-article, article resources>>"),
-								subsectionWithPath("_links").description("<<get-article-all,links>> to other resources").optional()
+								subsectionWithPath("_embedded.articleList").description("<<get-article, 게시물 상세>>"),
+								subsectionWithPath("_links").description("<<get-article, 게시물 상세>>").optional()
 						)
 				))
 		;
@@ -107,7 +105,8 @@ class ArticleControllerTest {
 								fieldWithPath("registerTimestamp").type(JsonFieldType.STRING).description("등록일시"),
 								fieldWithPath("updateId").type(JsonFieldType.VARIES).description("수정자").optional(),
 								fieldWithPath("updateTimestamp").type(JsonFieldType.VARIES).description("수정일시").optional(),
-								subsectionWithPath("_links").description("<<get-article-all,links>> to other resources")
+								subsectionWithPath("_links.self").description("<<get-article, 게시물 상세>>"),
+								subsectionWithPath("_links.article-all").description("<<get-article-all, 게시물 조회>>")
 						)
 				))
 		;

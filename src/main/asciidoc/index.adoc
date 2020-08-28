@@ -6,8 +6,10 @@ empering;
 :toc: left
 :toclevels: 4
 :sectlinks:
-:operation-curl-request-title: Example request
-:operation-http-response-title: Example response
+:operation-path-parameters-title: Path Parameters
+:operation-request-body-title: Request Body fields
+:operation-curl-request-title: Request Sample
+:operation-http-response-title: Response Sample
 
 [[overview]]
 = Overview
@@ -85,9 +87,7 @@ links to navigate from resource to resource.
 [[resources]]
 = Resources
 
-...
-
-[[resources-article]]
+[[article]]
 == Article
 
 게시판 api
@@ -95,35 +95,35 @@ links to navigate from resource to resource.
 [[get-article-all]]
 === 게시물 조회
 
-A `GET` request will list all of the service's notes.
+`GET` 요청을 통해 게시물 목록을 조회합니다.
 
-operation::get-article-all[snippets='response-fields,curl-request,http-response,links']
+operation::get-article-all[snippets='path-parameters,request-body,response-fields,curl-request,http-response,links']
 
 [[get-article]]
 === 게시물 상세 조회
 
-A `GET` request will list all of the service's notes.
+`GET` 요청을 통해 게시물 상세를 조회합니다.
 
-operation::get-article[snippets='response-fields,curl-request,http-response,links']
+operation::get-article[snippets='path-parameters,response-fields,curl-request,http-response,links']
 
 [[post-article]]
 === 게시물 등록
 
-A `GET` request will list all of the service's notes.
+`POST` 요청을 통해 게시물을 등록합니다.
 
-operation::post-article[snippets='response-fields,curl-request,http-response,links']
+operation::post-article[snippets='path-parameters,request-body,response-fields,curl-request,http-response,links']
 
 [[put-article]]
 === 게시물 수정
 
-A `GET` request will list all of the service's notes.
+`PUT` 요청을 통해 게시물을 수정합니다.
 
-operation::put-article[snippets='response-fields,curl-request,http-response,links']
+operation::put-article[snippets='path-parameters,request-body,response-fields,curl-request,http-response,links']
 
 [[delete-article]]
 === 게시물 삭제
 
-A `GET` request will list all of the service's notes.
+`DELETE` 요청을 통해 게시물을 삭제합니다.
 
-operation::delete-article[snippets='response-fields,curl-request,http-response,links']
+operation::delete-article[snippets='path-parameters,curl-request,http-response,links']
 

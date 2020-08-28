@@ -37,19 +37,18 @@ public class ArticleController {
 				.map(article ->
 						EntityModel.of(article,
 								linkTo(methodOn(ArticleController.class).getArticle(article.getArticleId())).withSelfRel(),
-								linkTo(methodOn(ArticleController.class).getArticleAll(null)).withRel("article")
+								linkTo(methodOn(ArticleController.class).getArticleAll(null)).withRel("article-all")
 						)).collect(Collectors.toList());
 
 		return CollectionModel.of(articles,
-				linkTo(methodOn(ArticleController.class).getArticleAll(dto)).withRel("article"));
+				linkTo(methodOn(ArticleController.class).getArticleAll(dto)).withSelfRel());
 	}
 
 	@GetMapping("/{articleId}")
 	public EntityModel<Article> getArticle(@PathVariable Long articleId) {
-		// return articleMapper.findById(articleId);
 		return EntityModel.of(articleMapper.findById(articleId),
 				linkTo(methodOn(ArticleController.class).getArticle(articleId)).withSelfRel(),
-				linkTo(methodOn(ArticleController.class).getArticleAll(null)).withRel("article")
+				linkTo(methodOn(ArticleController.class).getArticleAll(null)).withRel("article-all")
 		);
 	}
 
