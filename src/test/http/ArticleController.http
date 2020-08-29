@@ -1,5 +1,5 @@
 // 게시판 타입에 전체 게시물
-GET http://{{host}}/board/1/article
+GET http://{{host}}/boards/1/articles
 Accept: application/json
 Content-Type: application/json
 
@@ -16,7 +16,7 @@ client.test("get all articles by boardId", function() {
 ###
 
 // 게시물 1건 상세
-GET http://{{host}}/board/1/article/2
+GET http://{{host}}/boards/1/articles/2
 Accept: application/json
 
 > {%
@@ -28,38 +28,36 @@ client.test("get article by articleId", function() {
 ###
 
 // 게시물 등록
-POST http://{{host}}/board/2/article
+POST http://{{host}}/boards/2/articles
 Content-Type: application/json
 
 < ./data/article-post.json
 
 > {%
 client.test("post article", function() {
-  client.assert(response.status === 200, "Response status is not 201");
+  client.assert(response.status === 201, "Response status is not 201");
 });
 %}
 
 ###
 
 // 게시물 수정
-PUT http://{{host}}/board/2/article/5
+PUT http://{{host}}/boards/2/articles/5
 Content-Type: application/json
 
 < ./data/article-put.json
 
 > {%
 client.test("put article", function() {
-  client.assert(response.status === 200, "Response status is not 201");
+  client.assert(response.status === 201, "Response status is not 201");
 });
 %}
 
 ###
 
 // 게시물 삭제
-DELETE http://{{host}}/board/2/article/5
+DELETE http://{{host}}/boards/2/articles/5
 Content-Type: application/json
-
-< ./data/article-put.json
 
 > {%
 client.test("delete article", function() {
