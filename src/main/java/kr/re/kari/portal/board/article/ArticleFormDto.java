@@ -6,17 +6,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-public class ArticleFormDto extends BaseFormDto {
-	private long articleId;
+public class ArticleFormDto {
 	private long parentArticleId;
 	private long boardId;
-	private String noticeYn;
+	@NotNull
 	private String title;
+	@NotNull
 	private String contents;
-	private long readCount;
-	private String useYn;
+	private String noticeYn;
 }

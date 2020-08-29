@@ -41,9 +41,11 @@ public class ArticleController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> postArticle(@RequestBody Article article) {
+	public ResponseEntity<?> postArticle(@RequestBody ArticleFormDto articleDto) {
 
-		article.setBoardId(boardId);
+		articleDto.setBoardId(boardId);
+		Article article = modelMapper.map(articleDto, Article.class);
+
 		articleMapper.save(article);
 
 		EntityModel<Article> articleModel = assembler.toModel(articleMapper.findById(article.getArticleId()));
@@ -59,15 +61,16 @@ public class ArticleController {
 	}
 
 	@PutMapping("/{articleId}")
-	public ResponseEntity<?> putArticle(@PathVariable Long articleId, @RequestBody Article article) {
+	public ResponseEntity<?> putArticle(@PathVariable Long articleId, @RequestBody ArticleFormDto articleDto) {
 
-		Article targetArticle = articleMapper.findById(articleId);
+		articleDto.setBoardId(boardId);
+		Article article = articleMapper.findById(articleId);
 
-		if (targetArticle == null) {
+		if (article == null) {
 			return ResponseEntity.badRequest().build();
 		}
 
-		article.setArticleId(articleId);
+		modelMapper.map(articleDto, article);
 		articleMapper.update(article);
 
 		EntityModel<Article> articleModel = assembler.toModel(articleMapper.findById(article.getArticleId()));
