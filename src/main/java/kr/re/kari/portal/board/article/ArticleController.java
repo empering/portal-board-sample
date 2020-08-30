@@ -37,7 +37,7 @@ public class ArticleController {
 
 	@GetMapping()
 	public CollectionModel<EntityModel<Article>> getArticleAll(@RequestBody ArticleSearchDto dto) {
-		return assembler.toCollectionModel(articleMapper.findAll(boardId));
+		return assembler.toCollectionModel(articleMapper.findAll(boardId), boardId);
 	}
 
 	@PostMapping
