@@ -3,18 +3,19 @@ package kr.re.kari.portal.board.article;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController()
 @RequestMapping("/boards/{boardId}/articles")
@@ -36,8 +37,14 @@ public class ArticleController {
 	}
 
 	@GetMapping()
-	public CollectionModel<EntityModel<Article>> getArticleAll(@RequestBody ArticleSearchDto dto) {
-		return assembler.toCollectionModel(articleMapper.findAll(boardId), boardId);
+	public PagedModel<EntityModel<Article>> getArticleAll(
+			@RequestBody ArticleSearchDto dto, Pageable pageable,
+			PagedResourcesAssembler<Article> pagedResourcesAssembler) {
+
+		List<Article> articles = articleMapper.findAll(boardId);
+		Page<Article> page = new PageImpl<>(articles, pageable, articles.size());
+
+		return pagedResourcesAssembler.toModel(page);
 	}
 
 	@PostMapping
@@ -55,7 +62,7 @@ public class ArticleController {
 				.body(articleModel);
 	}
 
-	@GetMapping("{articleId}")
+	@GetMapping("/{articleId}")
 	public EntityModel<Article> getArticle(@PathVariable Long articleId) {
 		return assembler.toModel(articleMapper.findById(articleId));
 	}

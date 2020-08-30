@@ -18,7 +18,8 @@ public class ArticleModelAssembler implements RepresentationModelAssembler<Artic
 	public EntityModel<Article> toModel(Article article) {
 		return EntityModel.of(article,
 				linkTo(methodOn(ArticleController.class).getArticle(article.getArticleId())).withSelfRel().expand(article.getBoardId()),
-				linkTo(methodOn(ArticleController.class).getArticleAll(null)).withRel("articles").expand(article.getBoardId())
+				linkTo(ArticleController.class).withRel("articles").expand(article.getBoardId())
+				// linkTo(methodOn(ArticleController.class).getArticleAll(null, )).withRel("articles").expand(article.getBoardId())
 		);
 	}
 
@@ -28,7 +29,8 @@ public class ArticleModelAssembler implements RepresentationModelAssembler<Artic
 				StreamSupport.stream(articles.spliterator(), false)
 						.map(this::toModel)
 						.collect(Collectors.toList()),
-				linkTo(methodOn(ArticleController.class).getArticleAll(null)).withSelfRel()
+				linkTo(ArticleController.class).withSelfRel()
+				// linkTo(methodOn(ArticleController.class).getArticleAll(null)).withSelfRel()
 		);
 	}
 
@@ -37,7 +39,8 @@ public class ArticleModelAssembler implements RepresentationModelAssembler<Artic
 				StreamSupport.stream(articles.spliterator(), false)
 						.map(this::toModel)
 						.collect(Collectors.toList()),
-				linkTo(methodOn(ArticleController.class).getArticleAll(null)).withSelfRel().expand(boardId)
+				linkTo(ArticleController.class).withSelfRel().expand(boardId)
+				// linkTo(methodOn(ArticleController.class).getArticleAll(null)).withSelfRel().expand(boardId)
 		);
 	}
 }

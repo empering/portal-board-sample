@@ -80,9 +80,14 @@ class ArticleControllerTest {
 						pathParameters(
 								parameterWithName("boardId").description("게시판ID")
 						),
+						requestFields(
+								fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지번호").optional(),
+								fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지사이즈").optional()
+						),
 						responseFields(
 								subsectionWithPath("_embedded.articleList").description("<<get-article, 게시물 상세>>"),
-								subsectionWithPath("_links").description("<<get-article-links, 게시물 상세>>").optional()
+								subsectionWithPath("_links").description("<<get-article-links, 게시물 상세>>").optional(),
+								subsectionWithPath("page").description("페이지정보")
 						),
 						links(
 								linkWithRel("self").description("<<get-article-all, 게시물 조회>>")
