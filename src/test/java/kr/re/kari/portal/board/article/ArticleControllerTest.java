@@ -3,6 +3,7 @@ package kr.re.kari.portal.board.article;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.re.kari.portal.board.CustomRestDocumentationResultHandler;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,7 @@ class ArticleControllerTest {
 	}
 
 	@Test
+	@DisplayName("게시물 조회")
 	public void getArticleAll() throws Exception {
 		ArticleSearchDto dto = new ArticleSearchDto();
 		dto.setUseYn("Y");
@@ -67,7 +69,7 @@ class ArticleControllerTest {
 		String json = objectMapper.writeValueAsString(dto);
 
 		mockMvc.perform(
-				get("/articles", TEST_BOARD_ID)
+				get("/articles")
 						.queryParam("page", "2")
 						.queryParam("size", "2")
 						.content(json)
@@ -98,6 +100,7 @@ class ArticleControllerTest {
 	}
 
 	@Test
+	@DisplayName("게시물 등록")
 	public void postArticle() throws Exception {
 		ArticleFormDto dto = new ArticleFormDto();
 		dto.setBoardId(TEST_BOARD_ID);
@@ -108,7 +111,7 @@ class ArticleControllerTest {
 		String json = objectMapper.writeValueAsString(dto);
 
 		mockMvc.perform(
-				post("/articles", TEST_BOARD_ID)
+				post("/articles")
 						.content(json)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaTypes.HAL_JSON)
@@ -146,10 +149,10 @@ class ArticleControllerTest {
 	}
 
 	@Test
+	@DisplayName("게시물 상세")
 	public void getArticle() throws Exception {
 		mockMvc.perform(
-				get("/articles/{articleId}",
-						TEST_BOARD_ID, TEST_ARTICLE_ID)
+				get("/articles/{articleId}", TEST_ARTICLE_ID)
 						.accept(MediaTypes.HAL_JSON)
 		)
 				.andExpect(status().isOk())
@@ -182,6 +185,7 @@ class ArticleControllerTest {
 	}
 
 	@Test
+	@DisplayName("게시물 수정")
 	public void putArticle() throws Exception {
 		ArticleFormDto dto = new ArticleFormDto();
 		dto.setTitle("junit test title change");
@@ -191,8 +195,7 @@ class ArticleControllerTest {
 		String json = objectMapper.writeValueAsString(dto);
 
 		mockMvc.perform(
-				put("/articles/{articleId}",
-						TEST_BOARD_ID, TEST_ARTICLE_ID)
+				put("/articles/{articleId}", TEST_ARTICLE_ID)
 						.content(json)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaTypes.HAL_JSON)
@@ -232,10 +235,10 @@ class ArticleControllerTest {
 	}
 
 	@Test
+	@DisplayName("게시물 삭제")
 	public void deleteArticle() throws Exception {
 		mockMvc.perform(
-				delete("/articles/{articleId}",
-						TEST_BOARD_ID, TEST_ARTICLE_ID)
+				delete("/articles/{articleId}", TEST_ARTICLE_ID)
 						.accept(MediaType.APPLICATION_JSON)
 		)
 				.andExpect(status().isNoContent())
@@ -249,6 +252,7 @@ class ArticleControllerTest {
 	}
 
 	@Test
+	@DisplayName("존재하지않는 게시물ID로 게시물 삭제")
 	public void deleteArticleNotExistsArticleId() throws Exception {
 		mockMvc.perform(
 				delete("/articles/{articleId}", -9999)
