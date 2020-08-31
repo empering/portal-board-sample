@@ -5,6 +5,12 @@
 
 <mapper namespace="kr.re.kari.portal.board.article.ArticleMapper">
 
+    <sql id="where">
+        <where>
+            <if test="search.boardId != ''">AND BOARD_ID = #{search.boardId}</if>
+        </where>
+    </sql>
+
     <select id="findAll" resultType="article">
         SELECT
             ARTICLE_ID,
@@ -20,10 +26,14 @@
             UPDATE_ID,
             UPDATE_TIMESTAMP
         FROM BOARD_ARTICLE
-        <where>
-            <if test="search.boardId != ''">AND BOARD_ID = #{search.boardId}</if>
-        </where>
+        <include refid="where"></include>
         LIMIT #{pageable.size} OFFSET #{pageable.size} * #{pageable.page}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(1) AS COUNT
+        FROM BOARD_ARTICLE
+        <include refid="where"></include>
     </select>
 
     <select id="findById" resultType="article" parameterType="long">

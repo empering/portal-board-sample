@@ -23,7 +23,7 @@ import java.util.List;
 @Log4j2
 public class ArticleController {
 
-	private final ArticleMapper articleMapper;
+	private final ArticleService articleService;
 
 	private final ArticleModelAssembler assembler;
 
@@ -34,42 +34,41 @@ public class ArticleController {
 			@RequestBody ArticleSearchDto searchDto, Pageable pageable,
 			PagedResourcesAssembler<Article> pagedResourcesAssembler) {
 
-		List<Article> articles = articleMapper.findAll(modelMapper.map(searchDto, Article.class), pageable);
-		Page<Article> page = new PageImpl<>(articles, pageable, articles.size());
+		Article article = modelMapper.map(searchDto, Article.class);
+
+		Page<Article> page = articleService.findAll(article, pageable);
 
 		return pagedResourcesAssembler.toModel(page);
 	}
 
 	@PostMapping
 	public ResponseEntity<?> postArticle(@RequestBody ArticleFormDto articleDto) {
+
 		Article article = modelMapper.map(articleDto, Article.class);
 
-		articleMapper.save(article);
+		Article newArticle = articleService.save(article).orElseThrow();
 
-		EntityModel<Article> articleModel = assembler.toModel(articleMapper.findById(article.getArticleId()));
+		EntityModel<Article> articleModel = assembler.toModel(newArticle);
 
 		return ResponseEntity
-				.created(articleModel.getRequiredLink(IanaLinkRelations.SELF).expand(article.getArticleId()).toUri())
+				.created(articleModel.getRequiredLink(IanaLinkRelations.SELF).expand(newArticle.getArticleId()).toUri())
 				.body(articleModel);
 	}
 
 	@GetMapping("/{articleId}")
 	public EntityModel<Article> getArticle(@PathVariable Long articleId) {
-		return assembler.toModel(articleMapper.findById(articleId));
+		return assembler.toModel(articleService.findById(articleId).orElseThrow());
 	}
 
 	@PutMapping("/{articleId}")
 	public ResponseEntity<?> putArticle(@PathVariable Long articleId, @RequestBody ArticleFormDto articleDto) {
-		Article article = articleMapper.findById(articleId);
 
-		if (article == null) {
-			return ResponseEntity.badRequest().build();
-		}
+		Article article = articleService.findById(articleId).orElseThrow();
 
 		modelMapper.map(articleDto, article);
-		articleMapper.update(article);
+		Article newArticle = articleService.update(article).orElseThrow();
 
-		EntityModel<Article> articleModel = assembler.toModel(articleMapper.findById(article.getArticleId()));
+		EntityModel<Article> articleModel = assembler.toModel(newArticle);
 
 		return ResponseEntity
 				.created(articleModel.getRequiredLink(IanaLinkRelations.SELF).expand(articleId).toUri())
@@ -79,13 +78,9 @@ public class ArticleController {
 	@DeleteMapping("/{articleId}")
 	public ResponseEntity<?> deleteArticle(@PathVariable Long articleId) {
 
-		Article article = articleMapper.findById(articleId);
+		articleService.findById(articleId).orElseThrow();
 
-		if (article == null) {
-			return ResponseEntity.badRequest().build();
-		}
-
-		articleMapper.delete(articleId);
+		articleService.delete(articleId);
 
 		return ResponseEntity.noContent().build();
 	}
