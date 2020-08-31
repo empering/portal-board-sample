@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class ArticleSearchDto extends BaseSearchDto {
+	private String boardId;
 	private String parentArticleId;
 	private String title;
 	private String contents;

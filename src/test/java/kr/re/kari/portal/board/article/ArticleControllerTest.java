@@ -68,6 +68,8 @@ class ArticleControllerTest {
 
 		mockMvc.perform(
 				get("/articles", TEST_BOARD_ID)
+						.queryParam("page", "2")
+						.queryParam("size", "2")
 						.content(json)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaTypes.HAL_JSON)
@@ -81,11 +83,15 @@ class ArticleControllerTest {
 						),
 						responseFields(
 								subsectionWithPath("_embedded.articleList").type(JsonFieldType.VARIES).description("<<get-article, 게시물 상세>>").optional(),
-								subsectionWithPath("_links").description("<<get-article-links, 게시물 상세>>"),
+								subsectionWithPath("_links").type(JsonFieldType.VARIES).description("페이징"),
 								subsectionWithPath("page").description("페이지정보")
 						),
 						links(
-								linkWithRel("self").description("<<get-article-all, 게시물 조회>>")
+								linkWithRel("self").description("<<get-article-all, 게시물 조회>>"),
+								linkWithRel("first").description("first page url"),
+								linkWithRel("prev").description("prev page url").optional(),
+								linkWithRel("next").description("next page url").optional(),
+								linkWithRel("last").description("last page url")
 						)
 				))
 		;

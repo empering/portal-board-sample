@@ -31,10 +31,10 @@ public class ArticleController {
 
 	@GetMapping()
 	public PagedModel<EntityModel<Article>> getArticleAll(
-			@RequestBody ArticleSearchDto dto, Pageable pageable,
+			@RequestBody ArticleSearchDto searchDto, Pageable pageable,
 			PagedResourcesAssembler<Article> pagedResourcesAssembler) {
 
-		List<Article> articles = articleMapper.findAll();
+		List<Article> articles = articleMapper.findAll(modelMapper.map(searchDto, Article.class), pageable);
 		Page<Article> page = new PageImpl<>(articles, pageable, articles.size());
 
 		return pagedResourcesAssembler.toModel(page);

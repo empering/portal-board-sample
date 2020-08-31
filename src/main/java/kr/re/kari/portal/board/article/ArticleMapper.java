@@ -8,5 +8,5 @@ import java.util.List;
 
 @Mapper
 public interface ArticleMapper extends BaseMapper<Article, Long> {
-	List<Article> findAll(Long boardId);
+
 }
