@@ -1,4 +1,4 @@
-package kr.re.kari.portal.board.common;
+package kr.re.kari.portal.board.base;
 
 import lombok.Getter;
 import lombok.Setter;

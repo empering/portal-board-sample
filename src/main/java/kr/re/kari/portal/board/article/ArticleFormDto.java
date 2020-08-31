@@ -1,7 +1,6 @@
 package kr.re.kari.portal.board.article;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import kr.re.kari.portal.board.common.BaseFormDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

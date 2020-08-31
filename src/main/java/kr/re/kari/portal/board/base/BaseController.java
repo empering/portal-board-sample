@@ -1,4 +1,4 @@
-package kr.re.kari.portal.board.common;
+package kr.re.kari.portal.board.base;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
