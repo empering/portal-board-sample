@@ -1,26 +1,16 @@
 package kr.re.kari.portal.board.article;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.re.kari.portal.board.CustomRestDocumentationResultHandler;
+import kr.re.kari.portal.board.ControllerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -28,36 +18,14 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(RestDocumentationExtension.class)
-@SpringBootTest
-// @AutoConfigureMockMvc
-class ArticleControllerTest {
+class ArticleControllerTest extends ControllerTest {
 
 	private static final Long TEST_BOARD_ID = 1L;
 
 	private static final Long TEST_ARTICLE_ID = 1L;
 
-	private RestDocumentationResultHandler handler;
-
-	/*	MockMvc @Autowired 하려면 @AutoConfigureMockMvc 사용
-		RestDocumentationExtension 사용을 위해 수동 주입
-
-		// @Autowired
-		// MockMvc mockMvc;
-	*/
-	private MockMvc mockMvc;
-
-	@Autowired
-	ObjectMapper objectMapper;
-
 	@BeforeEach
-	public void setUp(WebApplicationContext webApplicationContext,
-					  RestDocumentationContextProvider restDocumentationContextProvider) {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-				.apply(documentationConfiguration(restDocumentationContextProvider))
-				.build();
-
-		this.handler = new CustomRestDocumentationResultHandler().getHandler();
+	public void setUp() {
 	}
 
 	@Test
@@ -78,7 +46,7 @@ class ArticleControllerTest {
 		)
 				.andExpect(status().isOk())
 				.andDo(print())
-				.andDo(this.handler.document(
+				.andDo(document("get-article-all",
 						requestFields(
 								fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지번호").optional(),
 								fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지사이즈").optional()
@@ -118,7 +86,7 @@ class ArticleControllerTest {
 		)
 				.andExpect(status().isCreated())
 				.andDo(print())
-				.andDo(this.handler.document(
+				.andDo(document("post-article",
 						requestFields(
 								fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시판ID"),
 								fieldWithPath("noticeYn").type(JsonFieldType.STRING).description("공지여부"),
@@ -157,7 +125,7 @@ class ArticleControllerTest {
 		)
 				.andExpect(status().isOk())
 				.andDo(print())
-				.andDo(this.handler.document(
+				.andDo(document("get-article",
 						pathParameters(
 								parameterWithName("articleId").description("게시물ID")
 						),
@@ -202,7 +170,7 @@ class ArticleControllerTest {
 		)
 				.andExpect(status().isCreated())
 				.andDo(print())
-				.andDo(this.handler.document(
+				.andDo(document("put-article",
 						pathParameters(
 								parameterWithName("articleId").description("게시물ID")
 						),
@@ -243,7 +211,7 @@ class ArticleControllerTest {
 		)
 				.andExpect(status().isNoContent())
 				.andDo(print())
-				.andDo(this.handler.document(
+				.andDo(document("delete-article",
 						pathParameters(
 								parameterWithName("articleId").description("게시물ID")
 						)
