@@ -247,4 +247,15 @@ class ArticleControllerTest {
 				))
 		;
 	}
+
+	@Test
+	public void deleteArticleNotExistsArticleId() throws Exception {
+		mockMvc.perform(
+				delete("/articles/{articleId}", -9999)
+						.accept(MediaTypes.HAL_JSON)
+		)
+				.andExpect(status().isNotFound())
+				.andDo(print())
+		;
+	}
 }
