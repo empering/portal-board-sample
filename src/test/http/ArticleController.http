@@ -1,5 +1,5 @@
 // 게시판 타입에 전체 게시물
-GET http://{{host}}/boards/1/articles
+GET http://{{host}}/articles
 Accept: application/json
 Content-Type: application/json
 
@@ -16,7 +16,7 @@ client.test("get all articles by boardId", function() {
 ###
 
 // 게시물 1건 상세
-GET http://{{host}}/boards/1/articles/2
+GET http://{{host}}/articles/2
 Accept: application/json
 
 > {%
@@ -28,7 +28,7 @@ client.test("get article by articleId", function() {
 ###
 
 // 게시물 등록
-POST http://{{host}}/boards/2/articles
+POST http://{{host}}/articles
 Content-Type: application/json
 
 < ./data/article-post.json
@@ -42,7 +42,7 @@ client.test("post article", function() {
 ###
 
 // 게시물 수정
-PUT http://{{host}}/boards/2/articles/5
+PUT http://{{host}}/articles/5
 Content-Type: application/json
 
 < ./data/article-put.json
@@ -56,7 +56,7 @@ client.test("put article", function() {
 ###
 
 // 게시물 삭제
-DELETE http://{{host}}/boards/2/articles/5
+DELETE http://{{host}}/articles/5
 Content-Type: application/json
 
 > {%

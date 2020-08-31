@@ -5,20 +5,20 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController()
-@RequestMapping("/boards/{boardId}/articles")
+@RequestMapping("/articles")
+@ExposesResourceFor(Article.class)
 @RequiredArgsConstructor
 @Log4j2
 public class ArticleController {
@@ -29,19 +29,12 @@ public class ArticleController {
 
 	private final ModelMapper modelMapper;
 
-	Long boardId;
-
-	@InitBinder
-	public void getBoardId(@PathVariable Long boardId) {
-		this.boardId = boardId;
-	}
-
 	@GetMapping()
 	public PagedModel<EntityModel<Article>> getArticleAll(
 			@RequestBody ArticleSearchDto dto, Pageable pageable,
 			PagedResourcesAssembler<Article> pagedResourcesAssembler) {
 
-		List<Article> articles = articleMapper.findAll(boardId);
+		List<Article> articles = articleMapper.findAll();
 		Page<Article> page = new PageImpl<>(articles, pageable, articles.size());
 
 		return pagedResourcesAssembler.toModel(page);
@@ -49,8 +42,6 @@ public class ArticleController {
 
 	@PostMapping
 	public ResponseEntity<?> postArticle(@RequestBody ArticleFormDto articleDto) {
-
-		articleDto.setBoardId(boardId);
 		Article article = modelMapper.map(articleDto, Article.class);
 
 		articleMapper.save(article);
@@ -69,8 +60,6 @@ public class ArticleController {
 
 	@PutMapping("/{articleId}")
 	public ResponseEntity<?> putArticle(@PathVariable Long articleId, @RequestBody ArticleFormDto articleDto) {
-
-		articleDto.setBoardId(boardId);
 		Article article = articleMapper.findById(articleId);
 
 		if (article == null) {

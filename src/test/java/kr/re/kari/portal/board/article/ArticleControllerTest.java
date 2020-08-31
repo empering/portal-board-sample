@@ -19,10 +19,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -69,7 +67,7 @@ class ArticleControllerTest {
 		String json = objectMapper.writeValueAsString(dto);
 
 		mockMvc.perform(
-				get("/boards/{boardId}/articles", TEST_BOARD_ID)
+				get("/articles", TEST_BOARD_ID)
 						.content(json)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaTypes.HAL_JSON)
@@ -77,16 +75,13 @@ class ArticleControllerTest {
 				.andExpect(status().isOk())
 				.andDo(print())
 				.andDo(this.handler.document(
-						pathParameters(
-								parameterWithName("boardId").description("게시판ID")
-						),
 						requestFields(
 								fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지번호").optional(),
 								fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지사이즈").optional()
 						),
 						responseFields(
-								subsectionWithPath("_embedded.articleList").description("<<get-article, 게시물 상세>>"),
-								subsectionWithPath("_links").description("<<get-article-links, 게시물 상세>>").optional(),
+								subsectionWithPath("_embedded.articleList").type(JsonFieldType.VARIES).description("<<get-article, 게시물 상세>>").optional(),
+								subsectionWithPath("_links").description("<<get-article-links, 게시물 상세>>"),
 								subsectionWithPath("page").description("페이지정보")
 						),
 						links(
@@ -99,6 +94,7 @@ class ArticleControllerTest {
 	@Test
 	public void postArticle() throws Exception {
 		ArticleFormDto dto = new ArticleFormDto();
+		dto.setBoardId(TEST_BOARD_ID);
 		dto.setTitle("junit test title");
 		dto.setContents("junit test contents");
 		dto.setNoticeYn("N");
@@ -106,7 +102,7 @@ class ArticleControllerTest {
 		String json = objectMapper.writeValueAsString(dto);
 
 		mockMvc.perform(
-				post("/boards/{boardId}/articles", TEST_BOARD_ID)
+				post("/articles", TEST_BOARD_ID)
 						.content(json)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaTypes.HAL_JSON)
@@ -114,10 +110,8 @@ class ArticleControllerTest {
 				.andExpect(status().isCreated())
 				.andDo(print())
 				.andDo(this.handler.document(
-						pathParameters(
-								parameterWithName("boardId").description("게시판ID")
-						),
 						requestFields(
+								fieldWithPath("boardId").type(JsonFieldType.NUMBER).description("게시판ID"),
 								fieldWithPath("noticeYn").type(JsonFieldType.STRING).description("공지여부"),
 								fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
 								fieldWithPath("contents").type(JsonFieldType.STRING).description("내용")
@@ -148,7 +142,7 @@ class ArticleControllerTest {
 	@Test
 	public void getArticle() throws Exception {
 		mockMvc.perform(
-				get("/boards/{boardId}/articles/{articleId}",
+				get("/articles/{articleId}",
 						TEST_BOARD_ID, TEST_ARTICLE_ID)
 						.accept(MediaTypes.HAL_JSON)
 		)
@@ -156,7 +150,6 @@ class ArticleControllerTest {
 				.andDo(print())
 				.andDo(this.handler.document(
 						pathParameters(
-								parameterWithName("boardId").description("게시판ID"),
 								parameterWithName("articleId").description("게시물ID")
 						),
 						responseFields(
@@ -192,7 +185,7 @@ class ArticleControllerTest {
 		String json = objectMapper.writeValueAsString(dto);
 
 		mockMvc.perform(
-				put("/boards/{boardId}/articles/{articleId}",
+				put("/articles/{articleId}",
 						TEST_BOARD_ID, TEST_ARTICLE_ID)
 						.content(json)
 						.contentType(MediaType.APPLICATION_JSON)
@@ -202,7 +195,6 @@ class ArticleControllerTest {
 				.andDo(print())
 				.andDo(this.handler.document(
 						pathParameters(
-								parameterWithName("boardId").description("게시판ID"),
 								parameterWithName("articleId").description("게시물ID")
 						),
 						requestFields(
@@ -233,11 +225,10 @@ class ArticleControllerTest {
 		;
 	}
 
-
 	@Test
 	public void deleteArticle() throws Exception {
 		mockMvc.perform(
-				delete("/boards/{boardId}/articles/{articleId}",
+				delete("/articles/{articleId}",
 						TEST_BOARD_ID, TEST_ARTICLE_ID)
 						.accept(MediaType.APPLICATION_JSON)
 		)
@@ -245,7 +236,6 @@ class ArticleControllerTest {
 				.andDo(print())
 				.andDo(this.handler.document(
 						pathParameters(
-								parameterWithName("boardId").description("게시판ID"),
 								parameterWithName("articleId").description("게시물ID")
 						)
 				))
