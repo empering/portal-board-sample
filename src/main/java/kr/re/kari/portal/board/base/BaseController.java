@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +24,16 @@ public class BaseController {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 	}
 
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseBody
+	public ResponseEntity<?> handleViolationException(MethodArgumentNotValidException e) {
+		log.error(e);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(EntityModel.of(e.getBindingResult(),
+						linkTo(IndexController.class).withRel("index")
+				));
+	}
+
 	@ExceptionHandler(DataNotFoundException.class)
 	@ResponseBody
 	public ResponseEntity<?> handleDataNotFoundException(DataNotFoundException e) {
@@ -32,4 +43,5 @@ public class BaseController {
 						linkTo(IndexController.class).withRel("index")
 				));
 	}
+
 }

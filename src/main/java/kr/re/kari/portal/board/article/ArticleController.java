@@ -14,6 +14,8 @@ import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController()
 @RequestMapping("/articles")
 @ExposesResourceFor(Article.class)
@@ -40,7 +42,7 @@ public class ArticleController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> postArticle(@RequestBody ArticleFormDto articleDto) {
+	public ResponseEntity<?> postArticle(@RequestBody @Valid ArticleFormDto articleDto) {
 
 		Article article = modelMapper.map(articleDto, Article.class);
 
@@ -59,7 +61,7 @@ public class ArticleController {
 	}
 
 	@PutMapping("/{articleId}")
-	public ResponseEntity<?> putArticle(@PathVariable Long articleId, @RequestBody ArticleFormDto articleDto) {
+	public ResponseEntity<?> putArticle(@PathVariable Long articleId, @RequestBody @Valid ArticleFormDto articleDto) {
 
 		Article article = articleService.findById(articleId).orElseThrow(ArticleDataNotFoundException::new);
 

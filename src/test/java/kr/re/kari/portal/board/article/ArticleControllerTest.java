@@ -117,6 +117,27 @@ class ArticleControllerTest extends ControllerTest {
 	}
 
 	@Test
+	@DisplayName("제목과 내용없이 게시물 등록")
+	public void postArticleInvalidRequest() throws Exception {
+		ArticleFormDto dto = new ArticleFormDto();
+		dto.setBoardId(TEST_BOARD_ID);
+		dto.setTitle(" ");
+		dto.setNoticeYn("N");
+
+		String json = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(
+				post("/articles")
+						.content(json)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaTypes.HAL_JSON)
+		)
+				.andExpect(status().isBadRequest())
+				.andDo(print())
+		;
+	}
+
+	@Test
 	@DisplayName("게시물 상세")
 	public void getArticle() throws Exception {
 		mockMvc.perform(
@@ -199,6 +220,26 @@ class ArticleControllerTest extends ControllerTest {
 								linkWithRel("articles").description("<<get-article-all, 게시물 조회>>")
 						)
 				))
+		;
+	}
+
+	@Test
+	@DisplayName("제목과 내용없이 게시물 수정")
+	public void purArticleInvalidRequest() throws Exception {
+		ArticleFormDto dto = new ArticleFormDto();
+		dto.setTitle(" ");
+		dto.setNoticeYn("Y");
+
+		String json = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(
+				put("/articles/{articleId}", TEST_ARTICLE_ID)
+						.content(json)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaTypes.HAL_JSON)
+		)
+				.andExpect(status().isBadRequest())
+				.andDo(print())
 		;
 	}
 

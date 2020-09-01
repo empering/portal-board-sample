@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -14,9 +14,9 @@ import javax.validation.constraints.NotNull;
 public class ArticleFormDto {
 	private long parentArticleId;
 	private long boardId;
-	@NotNull
+	@NotBlank
 	private String title;
-	@NotNull
+	@NotBlank
 	private String contents;
 	private String noticeYn;
 }
