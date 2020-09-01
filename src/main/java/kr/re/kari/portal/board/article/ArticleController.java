@@ -44,7 +44,7 @@ public class ArticleController {
 
 		Article article = modelMapper.map(articleDto, Article.class);
 
-		Article newArticle = articleService.save(article).orElseThrow(ArticleDataNotFoundException::new);
+		Article newArticle = articleService.save(article).orElseThrow(RuntimeException::new);
 
 		EntityModel<Article> articleModel = assembler.toModel(newArticle);
 
@@ -64,7 +64,7 @@ public class ArticleController {
 		Article article = articleService.findById(articleId).orElseThrow(ArticleDataNotFoundException::new);
 
 		modelMapper.map(articleDto, article);
-		Article newArticle = articleService.update(article).orElseThrow(ArticleDataNotFoundException::new);
+		Article newArticle = articleService.update(article).orElseThrow(RuntimeException::new);
 
 		EntityModel<Article> articleModel = assembler.toModel(newArticle);
 
