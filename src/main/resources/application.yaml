@@ -26,3 +26,13 @@ logging:
         ibatis: trace
       springframework:
         jdbc: debug
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    initialization-mode: embedded
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
