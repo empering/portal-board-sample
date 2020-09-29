@@ -68,6 +68,37 @@ class ArticleControllerTest extends ControllerTest {
 	}
 
 	@Test
+	@DisplayName("게시물 조회 조회조건 없는 경우")
+	public void getArticleAll_withoutRequestBody() throws Exception {
+		mockMvc.perform(
+				get("/articles")
+						.accept(MediaTypes.HAL_JSON)
+		)
+				.andExpect(status().isNotFound())
+				.andDo(print())
+		;
+	}
+
+	@Test
+	@DisplayName("게시물 조회 조회조건에 페이징정보 경우")
+	public void getArticleAll_withoutPagingInfo() throws Exception {
+		ArticleSearchDto dto = new ArticleSearchDto();
+		dto.setUseYn("Y");
+
+		String json = objectMapper.writeValueAsString(dto);
+
+		mockMvc.perform(
+				get("/articles")
+						.content(json)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaTypes.HAL_JSON)
+		)
+				.andExpect(status().isOk())
+				.andDo(print())
+		;
+	}
+
+	@Test
 	@DisplayName("게시물 등록")
 	public void postArticle() throws Exception {
 		ArticleFormDto dto = new ArticleFormDto();

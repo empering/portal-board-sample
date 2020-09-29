@@ -20,7 +20,7 @@ class ArticleMapperTest {
 
 	@Test
 	public void findAll() {
-		Article article = new Article();
+		ArticleSearchDto article = new ArticleSearchDto();
 		article.setBoardId(1L);
 
 		List<Article> all = articleMapper.findAll(article, PageRequest.of(1, 2));
@@ -30,7 +30,7 @@ class ArticleMapperTest {
 
 	@Test
 	public void count() {
-		Article article = new Article();
+		ArticleSearchDto article = new ArticleSearchDto();
 		article.setBoardId(1L);
 
 		int count = articleMapper.count(article);

@@ -10,15 +10,13 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController()
+@RestController
 @RequestMapping("/articles")
-@ExposesResourceFor(Article.class)
 @RequiredArgsConstructor
 @Log4j2
 public class ArticleController {
@@ -29,14 +27,16 @@ public class ArticleController {
 
 	private final ModelMapper modelMapper;
 
-	@GetMapping()
+	@GetMapping
 	public PagedModel<EntityModel<Article>> getArticleAll(
-			@RequestBody ArticleSearchDto searchDto, Pageable pageable,
+			@RequestBody(required = false) ArticleSearchDto searchDto, Pageable pageable,
 			PagedResourcesAssembler<Article> pagedResourcesAssembler) {
 
-		Article article = modelMapper.map(searchDto, Article.class);
+		if (searchDto == null) {
+			throw new ArticleDataNotFoundException();
+		}
 
-		Page<Article> page = articleService.findAll(article, pageable);
+		Page<Article> page = articleService.findAll(searchDto, pageable);
 
 		return pagedResourcesAssembler.toModel(page);
 	}

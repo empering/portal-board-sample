@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BaseMapper<T, ID> {
-	List<T> findAll(@Param("search") T entity, @Param("pageable") Pageable pageable);
+	<S extends BaseSearchDto> List<T> findAll(@Param("search") S dto, @Param("pageable") Pageable pageable);
 
-	int count(@Param("search") T entity);
+	<S extends BaseSearchDto> int count(@Param("search") S dto);
 
 	Optional<T> findById(ID id);
 

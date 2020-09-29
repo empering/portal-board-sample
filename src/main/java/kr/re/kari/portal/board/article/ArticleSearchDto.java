@@ -6,12 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class ArticleSearchDto extends BaseSearchDto {
-	private String boardId;
+	private long boardId;
 	private String parentArticleId;
 	private String title;
 	private String contents;

@@ -6,13 +6,13 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface BaseService<T, ID> {
-	Page<T> findAll(T entity, Pageable pageable);
+	<S extends BaseSearchDto> Page<T> findAll(S dto, Pageable pageable);
 
 	Optional<T> findById(ID id);
 
-	<S extends T> Optional<T> save(S entity);
+	Optional<T> save(T entity);
 
-	<S extends T> Optional<T> update(S entity);
+	Optional<T> update(T entity);
 
 	void delete(ID id);
 }
